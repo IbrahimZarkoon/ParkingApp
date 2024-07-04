@@ -6,9 +6,12 @@ import 'package:airportparking/Modals/ParkingSpaceClass.dart';
 import 'package:airportparking/Providers/UserProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../Constants/Icons.dart';
 
 class LocationPage extends StatefulWidget {
   const LocationPage({super.key});
@@ -18,17 +21,26 @@ class LocationPage extends StatefulWidget {
 }
 
 class _LocationPageState extends State<LocationPage> {
+
   final Completer<GoogleMapController> _controller = Completer();
-  LatLng _currentLatLng = LatLng(0, 0);
+  late PageController _pageController;
+
+  FocusNode searchNode = FocusNode();
+
+  LatLng _userLatLng = const LatLng(0, 0);
+  LatLng _selectedLatLng = const LatLng(0, 0);
+
   bool _locationLoaded = false;
   String loc = "Select location";
   bool _showSearchBar = false;
+  String _searchQuery = '';
+
   List<ParkingSpace> parkingSpacesList = [
     ParkingSpace(
         "0",
         "Downtown Garage",
         "123 Main St, Cityville",
-        LatLng(24.8742059, 67.0545099),
+        const LatLng(24.8742059, 67.0545099),
         200,
         5.00,
         0.00,
@@ -38,7 +50,7 @@ class _LocationPageState extends State<LocationPage> {
         "1",
         "City Center Lot",
         "456 Center St, Cityville",
-        LatLng(24.8722059, 67.0545099),
+        const LatLng(24.8722059, 67.0545099),
         150,
         0,
         18.00,
@@ -48,7 +60,7 @@ class _LocationPageState extends State<LocationPage> {
         "2",
         "Eastside Parking",
         "789 East St, Cityville",
-        LatLng(24.8732059, 67.0555099),
+        const LatLng(24.8732059, 67.0555099),
         100,
         4.00,
         00,
@@ -58,7 +70,7 @@ class _LocationPageState extends State<LocationPage> {
         "3",
         "Westend Garage",
         "321 West St, Cityville",
-        LatLng(24.8732059, 67.0535099),
+        const LatLng(24.8732059, 67.0535099),
         250,
         6.00,
         00,
@@ -67,7 +79,7 @@ class _LocationPageState extends State<LocationPage> {
         "4",
         "Northside Lot",
         "654 North St, Cityville",
-        LatLng(24.8732059, 67.0835099),
+        const LatLng(24.8732059, 67.0835099),
         175,
         0,
         19.00,
@@ -80,7 +92,14 @@ class _LocationPageState extends State<LocationPage> {
   void initState() {
     super.initState();
     _checkAndSetLocation();
-    _createMarkers();
+    _pageController = PageController();
+    _createMarkers(0);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   void _checkAndSetLocation() {
@@ -89,11 +108,11 @@ class _LocationPageState extends State<LocationPage> {
     if (userProvider.user.currentLocation.latitude != 0 &&
         userProvider.user.currentLocation.longitude != 0) {
       setState(() {
-        _currentLatLng = userProvider.user.currentLocation;
+        _userLatLng = userProvider.user.currentLocation;
         _locationLoaded = true;
-        loc = "${_currentLatLng.latitude}, ${_currentLatLng.longitude}";
+        loc = "${_userLatLng.latitude}, ${_userLatLng.longitude}";
       });
-      _moveCamera(_currentLatLng);
+      _moveCamera(_userLatLng);
     } else {
       _getCurrentLocation();
     }
@@ -103,13 +122,13 @@ class _LocationPageState extends State<LocationPage> {
     try {
       Position position = await determinePosition();
       setState(() {
-        _currentLatLng = LatLng(position.latitude, position.longitude);
+        _userLatLng = LatLng(position.latitude, position.longitude);
         Provider.of<UserProvider>(context, listen: false)
-            .setCurrentLocation(_currentLatLng);
+            .setCurrentLocation(_userLatLng);
         _locationLoaded = true;
-        loc = "${_currentLatLng.latitude}, ${_currentLatLng.longitude}";
+        loc = "${_userLatLng.latitude}, ${_userLatLng.longitude}";
       });
-      _moveCamera(_currentLatLng);
+      _moveCamera(_userLatLng);
     } catch (e) {
       print(e);
     }
@@ -147,50 +166,83 @@ class _LocationPageState extends State<LocationPage> {
     return await Geolocator.getCurrentPosition();
   }
 
-  void _createMarkers() {
+  void _createMarkers(int selectedIndex) {
     setState(() {
-      markerList = parkingSpacesList
-          .map((parkingSpace) => Marker(
-                markerId: MarkerId(parkingSpace.id),
-                position: parkingSpace.latlng ?? LatLng(0, 0),
-                onTap: () {},
-                anchor: Offset(0, -1),
-                icon: BitmapDescriptor.defaultMarkerWithHue(
-                    BitmapDescriptor.hueYellow),
-              ))
-          .toSet();
+      markerList = parkingSpacesList.map((parkingSpace) {
+        int index = parkingSpacesList.indexOf(parkingSpace);
+        return Marker(
+          markerId: MarkerId(parkingSpace.id),
+          position: parkingSpace.latlng ?? const LatLng(0, 0),
+          onTap: () {
+            setState(() {
+              _selectedLatLng = parkingSpace.latlng!;
+            });
+            print("SELECTED ::::::::::;; $_selectedLatLng");
+            _pageController.animateToPage(
+              index,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+            );
+          },
+          anchor: const Offset(0, -1),
+          icon: index == selectedIndex
+              ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan)
+              : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+        );
+      }).toSet();
     });
+  }
+
+  void _onCarouselChange(LatLng target) {
+    _moveCamera(target);
+  }
+
+  List<ParkingSpace> _searchParkingSpaces(String query) {
+    return parkingSpacesList
+        .where((space) =>
+    space.title!.toLowerCase().contains(query.toLowerCase()) ||
+        space.address!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("_currentLatLng: $_currentLatLng");
+    print("_currentLatLng: $_userLatLng");
 
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
 
+    List<ParkingSpace> filteredParkingSpaces =
+    _searchParkingSpaces(_searchQuery);
+
+
     return Scaffold(
       body: _locationLoaded
           ? Stack(children: [
-              Container(
+              SizedBox(
                 width: width,
                 height: height,
                 child: GoogleMap(
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
                   },
+                  compassEnabled: true,
+                  onCameraMove: (position)
+                  {
+                    searchNode.unfocus();
+                  },
                   zoomControlsEnabled: false,
                   zoomGesturesEnabled: true,
                   initialCameraPosition:
-                      CameraPosition(target: _currentLatLng, zoom: 15),
+                      CameraPosition(target: _userLatLng, zoom: 15),
                   onTap: (latlong) {
                     print(latlong);
                   },
                   mapType: MapType.terrain,
                   markers: {
                     Marker(
-                      markerId: MarkerId('currentLocation'),
-                      position: _currentLatLng,
+                      markerId: const MarkerId('currentLocation'),
+                      position: _userLatLng,
                       icon: BitmapDescriptor.defaultMarker,
                     ),
                     ...markerList,
@@ -205,136 +257,204 @@ class _LocationPageState extends State<LocationPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Container(
-                        margin: EdgeInsets.only(bottom: height * 0.015),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: height * 0.015),
-                        decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.95),
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: black.withOpacity(0.15),
-                                  offset: Offset(1, 1),
-                                  blurRadius: 1.5,
-                                  spreadRadius: 1)
-                            ]),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: AnimatedSwitcher(
-                                duration: Duration(milliseconds: 300),
-                                child: _showSearchBar
-                                    ? TextField(
+                    Row(
+                      children: [
+                        Flexible(
+                          child: InkWell(
+                            onTap: ()
+                            {
+                              setState(() {
+                                _showSearchBar = true;
+                              });
+                              searchNode.requestFocus();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: height * 0.015,right: height * 0.015),
+                              padding: EdgeInsets.symmetric(horizontal: height * 0.015),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.95),
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: black.withOpacity(0.15),
+                                    offset: const Offset(1, 1),
+                                    blurRadius: 1.5,
+                                    spreadRadius: 1,
+                                  )
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: AnimatedSwitcher(
+                                      duration: const Duration(milliseconds: 300),
+                                      child: _showSearchBar
+                                          ? TextField(
+                                        focusNode: searchNode,
                                         cursorColor: primaryColor,
                                         style: TextStyle(
                                             color: primaryColor, fontSize: 14),
                                         decoration: InputDecoration(
-                                          hintText: 'Search',
+                                          hintText: 'Where are you going?',
                                           border: InputBorder.none,
                                           hintStyle:
-                                              TextStyle(color: primaryColor),
+                                          TextStyle(color: primaryColor),
                                         ),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _searchQuery = value;
+                                          });
+                                        },
                                       )
-                                    : Text(
+                                          : Text(
                                         loc,
                                         style: TextStyle(
                                             fontSize: 14, color: primaryColor),
                                       ),
-                              ),
-                            ),
-                            IconButton(
-                              icon: _showSearchBar
-                                  ? Icon(
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: _showSearchBar
+                                        ? Icon(
                                       Icons.close,
                                       color: primaryColor,
                                     )
-                                  : Icon(
+                                        : Icon(
                                       Icons.search,
                                       color: primaryColor,
                                     ),
-                              onPressed: () {
+                                    onPressed: () {
+                                      setState(() {
+                                        _showSearchBar = !_showSearchBar;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(bottom: height * 0.015),
+                          padding: EdgeInsets.all( height * 0.015),
+                          decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: black.withOpacity(0.15),
+                                offset: const Offset(1, 1),
+                                blurRadius: 1.5,
+                                spreadRadius: 1,
+                              )
+                            ],
+                          ),
+                          child: SvgPicture.string(
+                            svgString,
+                            fit: BoxFit.contain,
+                            color: white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (_searchQuery.isNotEmpty) Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.95),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: black.withOpacity(0.15),
+                              offset: const Offset(1, 1),
+                              blurRadius: 1.5,
+                              spreadRadius: 1,
+                            )
+                          ],
+                        ),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: filteredParkingSpaces.length,
+                          itemBuilder: (context, index) {
+                            final space = filteredParkingSpaces[index];
+                            return ListTile(
+                              title: Text("${space.title}"),
+                              subtitle: Text("${space.address}"),
+                              onTap: () {
+                                _moveCamera(space.latlng!);
+                                int ind = parkingSpacesList.indexOf(space);
+                                _pageController.animateToPage(
+                                  ind,
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
                                 setState(() {
-                                  _showSearchBar = !_showSearchBar;
+                                  _showSearchBar = false;
+                                  loc = "${space.title}";
+                                  _searchQuery = '';
                                 });
                               },
-                            ),
-                          ],
-                        )),
-                    FloatingActionButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      backgroundColor: primaryColor,
-                      onPressed: () {
-                        _getCurrentLocation();
+                            );
+                          },
+                        ),
+                      ),
+                    InkWell(
+                      onTap: ()
+                      async {
+                        await _getCurrentLocation();
                       },
-                      child:  Icon(
-                        CupertinoIcons.location,
-                        color: Colors.white,
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: height * 0.015),
+                        padding: EdgeInsets.all( height * 0.015),
+                        decoration: BoxDecoration(
+                          color: primaryColor,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: black.withOpacity(0.15),
+                              offset: const Offset(1, 1),
+                              blurRadius: 1.5,
+                              spreadRadius: 1,
+                            )
+                          ],
+                        ),
+                        child: const Icon(
+                          CupertinoIcons.location,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                    // SizedBox(
-                    //   height: height * 0.015,
-                    // ),
-                    // FloatingActionButton(
-                    //   backgroundColor: Colors.white,
-                    //   onPressed: () {
-                    //     _getCurrentLocation();
-                    //   },
-                    //   child: Icon(
-                    //     Icons.location_searching,
-                    //     color: primaryColor,
-                    //   ),
-                    // ),
                   ],
                 ),
-                //   child: AppBar(
-                //   backgroundColor: primaryColor,
-                //   leadingWidth: 30,
-                //   automaticallyImplyLeading: true,
-                //   title: AnimatedSwitcher(
-                //     duration: Duration(milliseconds: 300),
-                //     child: _showSearchBar
-                //         ? TextField(
-                //       cursorColor: Colors.white,
-                //       style: TextStyle(color: Colors.white, fontSize: 14),
-                //       decoration: InputDecoration(
-                //         hintText: 'Search',
-                //         border: InputBorder.none,
-                //         hintStyle: TextStyle(color: Colors.white),
-                //       ),
-                //     )
-                //         : Text(
-                //       loc,
-                //       style: TextStyle(fontSize: 14),
-                //     ),
-                //   ),
-                //   actions: [
-                //     IconButton(
-                //       icon: _showSearchBar ? Icon(Icons.close) : Icon(Icons.search),
-                //       onPressed: () {
-                //         setState(() {
-                //           _showSearchBar = !_showSearchBar;
-                //         });
-                //       },
-                //     ),
-                //     const SizedBox(width: 20),
-                //   ],
-                // ),
+
               ),
 
               Positioned(
           bottom: 0, left: 0,
           right: 0,
 
-          child: Container(
-              width: width,
-              height: height*0.175,
-              child: ParkingSpacesCarousel(parkingSpacesList: parkingSpacesList,))
+                  child: SizedBox(
+                    width: width,
+                    height: height*0.175,
+                    child: FutureBuilder<GoogleMapController>(
+                      future: _controller.future,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return ParkingSpacesCarousel(
+                            createMarkers: _createMarkers,
+                            parkingSpacesList: parkingSpacesList,
+                            gmController: snapshot.data!,
+                            pageController: _pageController,
+                            onCarouselChange: _onCarouselChange,
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      },
+                    ),
         ),
-            ])
-          : Center(child: CircularProgressIndicator()),
+              )])
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 }

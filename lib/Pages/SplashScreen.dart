@@ -1,10 +1,11 @@
 import 'package:airportparking/Pages/DashboardPage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../Constants/Colors.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   proceedtoHome()
   {
     Future.delayed(
-        Duration(milliseconds: 1500),
+        const Duration(milliseconds: 1500),
         () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => DashboardPage(tabindex: 0))),
     );
   }
@@ -58,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               ),
             ),
           ),
-          Align(
+          const Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: EdgeInsets.only(bottom: 32.0),

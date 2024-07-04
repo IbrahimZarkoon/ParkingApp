@@ -8,7 +8,7 @@ class UserProvider extends ChangeNotifier {
     id: '',
     name: '',
     address: '',
-    currentLocation: LatLng(0, 0),
+    currentLocation: const LatLng(0, 0),
   );
 
   User get user => _user;

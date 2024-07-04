@@ -15,7 +15,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> with SingleTickerProviderStateMixin{
 
   final userTabs = [
-    LocationPage(),
+    const LocationPage(),
     Container(),
     Container(),
     Container(),
@@ -47,7 +47,7 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
           elevation: 10,
           clipBehavior: Clip.hardEdge,
           shadowColor: Colors.black.withOpacity(0.5),
-          child:  Drawer(
+          child:  const Drawer(
 
           ),
 
@@ -55,11 +55,11 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
 
         //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         appBar:  PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight),
-          child: widget.tabindex == 0? SizedBox() : AppBar(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: widget.tabindex == 0? const SizedBox() : AppBar(
             backgroundColor: primaryColor,
             leading: Container(
-                margin: EdgeInsets.only(left: 10),
+                margin: const EdgeInsets.only(left: 10),
                 child: Image.asset("assets/logos/Logo_White.png")),
             leadingWidth: 100,
           )
@@ -119,7 +119,7 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
                 child:  Flexible(child: Text("Home",style: TextStyle(fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014),)),
               ),
               Tab(
-                iconMargin: EdgeInsets.only(bottom: 0),
+                iconMargin: const EdgeInsets.only(bottom: 0),
                 icon: Icon(widget.tabindex == 1? Icons.table_bar :Icons.table_bar_outlined,size:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.025 : MediaQuery.sizeOf(context).width*0.025),
                 child: Flexible(child: Text("",style: TextStyle(fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014),)),
               ),
