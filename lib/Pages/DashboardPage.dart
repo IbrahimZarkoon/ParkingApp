@@ -48,7 +48,6 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
           clipBehavior: Clip.hardEdge,
           shadowColor: Colors.black.withOpacity(0.5),
           child:  const Drawer(
-
           ),
 
         ),
@@ -115,13 +114,13 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
 
               Tab(
                 iconMargin: const EdgeInsets.only(bottom: 0),
-                icon: Icon(widget.tabindex == 0? Icons.home : Icons.home_outlined,size:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.025 : MediaQuery.sizeOf(context).width*0.025,),
-                child:  Flexible(child: Text("Home",style: TextStyle(fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014),)),
+                icon: Icon(widget.tabindex == 0? Icons.local_parking : Icons.local_parking_outlined,size:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.025 : MediaQuery.sizeOf(context).width*0.025,),
+                child:  Flexible(child: Text("Parking",style: TextStyle(fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014),)),
               ),
               Tab(
                 iconMargin: const EdgeInsets.only(bottom: 0),
-                icon: Icon(widget.tabindex == 1? Icons.table_bar :Icons.table_bar_outlined,size:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.025 : MediaQuery.sizeOf(context).width*0.025),
-                child: Flexible(child: Text("",style: TextStyle(fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014),)),
+                icon: Icon(widget.tabindex == 1? Icons.car_rental :Icons.car_rental_outlined,size:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.025 : MediaQuery.sizeOf(context).width*0.025),
+                child: Flexible(child: Text("Rent Out",style: TextStyle(fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014),)),
               ),
               Tab(
                 iconMargin: const EdgeInsets.only(bottom: 0),
