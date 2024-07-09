@@ -1,7 +1,9 @@
+import 'package:airportparking/CustomWidgets/SingleParkingSpaceModal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../Constants/Colors.dart';
 import '../Modals/ParkingSpaceClass.dart';
 
 class ParkingSpacesCarousel extends StatefulWidget {
@@ -33,6 +35,7 @@ class _ParkingSpacesCarouselState extends State<ParkingSpacesCarousel> {
     double width = MediaQuery.of(context).size.width;
     return PageView.builder(
       controller: widget.pageController,
+
       onPageChanged: (index) {
         LatLng target = widget.parkingSpacesList[index].latlng!;
         widget.onCarouselChange(target);
@@ -50,101 +53,120 @@ class _ParkingSpacesCarouselState extends State<ParkingSpacesCarousel> {
   {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: height*0.015,vertical: height*0.015),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                offset: const Offset(1,1),
-                spreadRadius: 1,
-                blurRadius: 5
-            )
-          ]
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: height*0.015,vertical: height*0.015),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${parkingSpace.title}",
-                        style: TextStyle(
-                          fontSize: height*0.022,
-                          fontWeight: FontWeight.bold,
+    return InkWell(
+      onTap: ()
+      {
+        showModalBottomSheet(
+            isScrollControlled: true,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20))),
+            context: context,
+            constraints: BoxConstraints(
+              maxHeight: height*0.9,
+              minHeight: height*0.7,
+              maxWidth: width,
+            ),
+            backgroundColor: white,
+            elevation: 0,
+            builder: (BuildContext context)
+        {
+          return SingleParkingSpaceModal(
+            parkingSpace: parkingSpace,
+          );
+        }
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: height*0.015,vertical: height*0.015),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  offset: const Offset(1,1),
+                  spreadRadius: 1,
+                  blurRadius: 5
+              )
+            ]
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: height*0.015,vertical: height*0.015),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${parkingSpace.title}",
+                          style: TextStyle(
+                            fontSize: height*0.022,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text("${parkingSpace.address}",
-                        style: TextStyle(
-                          fontSize: height*0.016,
+                        Text("${parkingSpace.address}",
+                          style: TextStyle(
+                            fontSize: height*0.016,
+                            fontWeight: FontWeight.normal,
+                          ),),
+                      ],
+                    ),
+                    Row(crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+
+                        Icon(CupertinoIcons.car_detailed,size: height*0.0225,),
+                        SizedBox(width: height*0.005,),
+
+                        Text('${parkingSpace.capacity}',style: TextStyle(
+                          fontSize: height*0.018,
                           fontWeight: FontWeight.normal,
                         ),),
-                    ],
-                  ),
-                  Row(crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
 
+                        SizedBox(width: height*0.015,),
 
-                      Icon(CupertinoIcons.car_detailed,size: height*0.0225,),
-                      SizedBox(width: height*0.005,),
+                        Icon(CupertinoIcons.money_dollar_circle,size: height*0.0225,),
+                        SizedBox(width: height*0.005,),
 
+                        if(parkingSpace.hourlyRate! > 0) Text('\$${parkingSpace.hourlyRate}/hr',style: TextStyle(
+                          fontSize: height*0.018,
+                          fontWeight: FontWeight.normal,
+                        ),),
 
-                      Text('${parkingSpace.capacity}',style: TextStyle(
-                        fontSize: height*0.018,
-                        fontWeight: FontWeight.normal,
-                      ),),
+                        if(parkingSpace.dailyRate! > 0) Text('\$${parkingSpace.dailyRate}/day',style: TextStyle(
+                          fontSize: height*0.018,
+                          fontWeight: FontWeight.normal,
+                        ),),
 
-                      SizedBox(width: height*0.015,),
-
-
-                      Icon(CupertinoIcons.money_dollar_circle,size: height*0.0225,),
-                      SizedBox(width: height*0.005,),
-
-                      if(parkingSpace.hourlyRate! > 0) Text('\$${parkingSpace.hourlyRate}/hr',style: TextStyle(
-                        fontSize: height*0.018,
-                        fontWeight: FontWeight.normal,
-                      ),),
-
-                      if(parkingSpace.dailyRate! > 0) Text('\$${parkingSpace.dailyRate}/day',style: TextStyle(
-                        fontSize: height*0.018,
-                        fontWeight: FontWeight.normal,
-                      ),),
-
-
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(width: height*0.015,),
-
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all( Radius.circular(12),),
-                child: Image.network(
-                  // Replace with your image loading mechanism
-                  '${parkingSpace.images?[0]}',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+
+              SizedBox(width: height*0.015,),
+
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all( Radius.circular(12),),
+                  child: Image.network(
+                    // Replace with your image loading mechanism
+                    '${parkingSpace.images?[0]}',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
