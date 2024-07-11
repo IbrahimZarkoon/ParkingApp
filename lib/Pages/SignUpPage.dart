@@ -4,7 +4,6 @@ import '../Constants/colors.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
-
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -56,534 +55,368 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  Widget customTextField({required String hintText, required TextEditingController controller, bool isPassword = false, TextInputType keyboardType = TextInputType.text, IconData? suffixIcon, Function? onTapSuffixIcon}) {
+    double height = MediaQuery.of(context).size.height;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(7),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.25),
+            offset: Offset(0, 0),
+            blurRadius: 1,
+            spreadRadius: 0,
+          )
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword ? _isObscured : false,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: height * 0.019,
+          fontWeight: FontWeight.bold,
+        ),
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: height * 0.02,
+            vertical: height * 0.015,
+          ),
+          hintText: hintText,
+          hintStyle: TextStyle(
+            color: Colors.black.withOpacity(0.5),
+            fontSize: height * 0.018,
+            fontWeight: FontWeight.bold,
+          ),
+          border: InputBorder.none,
+          suffixIcon: suffixIcon != null
+              ? IconButton(
+            icon: Icon(suffixIcon, color: _isObscured ? Colors.black.withOpacity(0.8) : Colors.black),
+            onPressed: () {
+              if (onTapSuffixIcon != null) {
+                onTapSuffixIcon();
+              }
+            },
+          )
+              : null,
+        ),
+        keyboardType: keyboardType,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: white,
+      backgroundColor: Colors.white,
       body: Stack(
-          children: [
-            SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.025),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  Center(child: Image.asset('assets/logos/Logo_White.png',color: primaryColor,width: width/2,),),
-                  // Replace with your logo asset path
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  Center(
-                    child: Text(
-                      'BECOME A MEMBER',
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: black,
-                          fontSize: MediaQuery.sizeOf(context).height * 0.03,
-                          fontFamily: "OpenSans_SemiBold",
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
-                  Center(
-                    child: Text(
-                      'Become a Member - you\'ll enjoy exclusive deals, offers, invites and rewards.',
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: black,
-                          fontSize: MediaQuery.sizeOf(context).height * 0.016,
-                          fontFamily: "OpenSans_SemiBold"),
-                    ),
-                  ),
-                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.06),
-
-                  TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email *',
-                      labelStyle: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.018,
-                        fontFamily: "OpenSans",
-                        color: black,
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.height * 0.015,
-                          vertical: MediaQuery.of(context).size.height * 0.015),
-                      border: const OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-
-                  TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Create a password *',
-                      labelStyle: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.018,
-                        fontFamily: "OpenSans",
-                        color: black,
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.height * 0.015,
-                          vertical: MediaQuery.of(context).size.height * 0.015),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                            _isObscured ? Icons.visibility : Icons.visibility_off,
-                            color: _isObscured
-                                ? Colors.black.withOpacity(0.8)
-                                : primaryColor),
-                        onPressed: () {
-                          setState(() {
-                            _isObscured = !_isObscured;
-                          });
-                        },
-                      ),
-                      border: const OutlineInputBorder(),
-                    ),
-                    obscureText: _isObscured,
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.005),
-
-                  Text(
-                    "Minimum 8 characters",
+        children: [
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.025),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                Center(child: Image.asset('assets/logos/Logo_White.png', color: primaryColor, width: width / 2,)),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                Center(
+                  child: Text(
+                    'BECOME A MEMBER',
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: black.withOpacity(0.6),
-                        fontFamily: "OpenSans",
-                        fontSize: MediaQuery.sizeOf(context).height * 0.013),
-                    textAlign: TextAlign.start,
+                      color: Colors.black,
+                      fontSize: MediaQuery.sizeOf(context).height * 0.03,
+                      fontFamily: "OpenSans_SemiBold",
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-
-
-                  TextFormField(
+                ),
+                SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+                Center(
+                  child: Text(
+                    'Become a Member - you\'ll enjoy exclusive deals, offers, invites and rewards.',
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.height * 0.018,
-                      fontFamily: "OpenSans",
-                      color: black,
+                      color: Colors.black,
+                      fontSize: MediaQuery.sizeOf(context).height * 0.016,
+                      fontFamily: "OpenSans_SemiBold",
                     ),
-
-                    controller: _dobController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      hintText: 'Date of Birth *',
-                      suffixIcon: const Icon(Icons.calendar_today),
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.height * 0.015,
-                          vertical: MediaQuery.of(context).size.height * 0.015),
-                    ),
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode()); // to prevent opening default keyboard
-                      _selectDate(context, _dobController);
-                    },
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                ),
+                SizedBox(height: MediaQuery.sizeOf(context).height * 0.06),
 
-                  Text(
-                    "LakesAmerica wants to give you a special treat on your birthday",
-                    style: TextStyle(
-                        color: black.withOpacity(0.6),
-                        fontFamily: "OpenSans",
-                        fontSize: MediaQuery.sizeOf(context).height * 0.013),
-                    textAlign: TextAlign.start,
+                customTextField(
+                  hintText: 'Email *',
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                customTextField(
+                  hintText: 'Create a password *',
+                  controller: _passwordController,
+                  isPassword: true,
+                  suffixIcon: _isObscured ? Icons.visibility : Icons.visibility_off,
+                  onTapSuffixIcon: () {
+                    setState(() {
+                      _isObscured = !_isObscured;
+                    });
+                  },
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                Text(
+                  "Minimum 8 characters",
+                  style: TextStyle(
+                    color: Colors.black.withOpacity(0.6),
+                    fontFamily: "OpenSans",
+                    fontSize: MediaQuery.sizeOf(context).height * 0.013,
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                  TextField(
-                    controller: _phoneController,
-                    decoration: InputDecoration(
-                      labelText: 'Phone *',
-                      labelStyle: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.018,
-                        fontFamily: "OpenSans",
-                        color: black,
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.height * 0.015,
-                          vertical: MediaQuery.of(context).size.height * 0.015),
-                      border: const OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.phone,
+                  textAlign: TextAlign.start,
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                customTextField(
+                  hintText: 'Date of Birth *',
+                  controller: _dobController,
+                  suffixIcon: Icons.calendar_today,
+                  onTapSuffixIcon: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    _selectDate(context, _dobController);
+                  },
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.005),
+                Text(
+                  "Trinqoo wants to give you a special treat on your birthday",
+                  style: TextStyle(
+                    color: Colors.black.withOpacity(0.6),
+                    fontFamily: "OpenSans",
+                    fontSize: MediaQuery.sizeOf(context).height * 0.013,
                   ),
+                  textAlign: TextAlign.start,
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                customTextField(
+                  hintText: 'Phone *',
+                  controller: _phoneController,
+                  keyboardType: TextInputType.phone,
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color:_isExpanded? primaryColor : Colors.black.withOpacity(0.2)),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: ExpansionPanelList(
+                      elevation: 0,
+                      animationDuration: const Duration(milliseconds: 500),
+                      expandedHeaderPadding: EdgeInsets.zero,
+                      expansionCallback: (int index, bool isExpanded) {
+                        setState(() {
+                          _isExpanded = !_isExpanded;
+                        });
+                      },
+                      expandIconColor: Colors.black,
+                      children: [
+                        ExpansionPanel(
 
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-
-                  //Add More Container
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: black.withOpacity(0.2))),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: ExpansionPanelList(
-                        elevation: 0,
-                        animationDuration: const Duration(milliseconds: 500),
-                        expandedHeaderPadding: EdgeInsets.zero,
-                        expansionCallback: (int index, bool isExpanded) {
-                          setState(() {
-                            _isExpanded = !_isExpanded;
-                          });
-                        },
-                        expandIconColor: secondaryColor,
-                        children: [
-                          ExpansionPanel(
-                            backgroundColor: white,
-                            headerBuilder: (BuildContext context, bool isExpanded) {
-                              return InkWell(
-                                splashColor: Colors.transparent,
-                                onTap: () {
-                                  setState(() {
-                                    _isExpanded = !_isExpanded;
-                                  });
-                                },
-                                child: ListTile(
-                                  iconColor: secondaryColor,
-                                  title: Text(
-                                    'Add more',
-                                    style: TextStyle(
-                                      fontSize: MediaQuery.of(context).size.height *
-                                          0.018,
-                                      fontFamily: "OpenSans_SemiBold",
-                                      fontWeight: FontWeight.bold,
-                                      color: secondaryColor,
-                                    ),
+                          backgroundColor: Colors.white,
+                          headerBuilder: (BuildContext context, bool isExpanded) {
+                            return InkWell(
+                              splashColor: Colors.transparent,
+                              onTap: () {
+                                setState(() {
+                                  _isExpanded = !_isExpanded;
+                                });
+                              },
+                              child: ListTile(
+                                title: Text(
+                                  'Add more',
+                                  style: TextStyle(
+                                    fontSize: MediaQuery.of(context).size.height * 0.018,
+                                    fontFamily: "OpenSans_SemiBold",
+                                    fontWeight: FontWeight.bold,
+                                    color:black,
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
                                 ),
-                              );
-                            },
-                            body: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                  MediaQuery.of(context).size.height * 0.025),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                      height: MediaQuery.of(context).size.height *
-                                          0.03),
-                                  TextField(
-                                    controller: _firstNameController,
-                                    decoration: InputDecoration(
-                                      labelText: 'First Name',
-                                      labelStyle: TextStyle(
-                                        fontSize:
-                                        MediaQuery.of(context).size.height *
-                                            0.018,
-                                        fontFamily: "OpenSans",
-                                        color: black.withOpacity(0.7),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal:
-                                        MediaQuery.of(context).size.height *
-                                            0.015,
-                                        vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.015,
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      disabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                    ),
-                                    keyboardType: TextInputType.text,
-                                  ),
-                                  SizedBox(
-                                      height: MediaQuery.of(context).size.height *
-                                          0.03),
-                                  TextField(
-                                    controller: _lastNameController,
-                                    decoration: InputDecoration(
-                                      labelText: 'Last Name',
-                                      labelStyle: TextStyle(
-                                        fontSize:
-                                        MediaQuery.of(context).size.height *
-                                            0.018,
-                                        fontFamily: "OpenSans",
-                                        color: black.withOpacity(0.7),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal:
-                                        MediaQuery.of(context).size.height *
-                                            0.015,
-                                        vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.015,
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      disabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                    ),
-                                    keyboardType: TextInputType.text,
-                                  ),
-                                  SizedBox(
-                                      height: MediaQuery.of(context).size.height *
-                                          0.03),
-                                  TextField(
-                                    controller: _genderController,
-                                    decoration: InputDecoration(
-                                      labelText: 'Gender',
-                                      labelStyle: TextStyle(
-                                        fontSize:
-                                        MediaQuery.of(context).size.height *
-                                            0.018,
-                                        fontFamily: "OpenSans",
-                                        color: black.withOpacity(0.7),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal:
-                                        MediaQuery.of(context).size.height *
-                                            0.015,
-                                        vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.015,
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      disabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                    ),
-                                    keyboardType: TextInputType.text,
-                                  ),
-                                  SizedBox(
-                                      height: MediaQuery.of(context).size.height *
-                                          0.03),
-                                  TextField(
-                                    controller: _zipCodeController,
-                                    decoration: InputDecoration(
-                                      labelText: 'Zip Code',
-                                      labelStyle: TextStyle(
-                                        fontSize:
-                                        MediaQuery.of(context).size.height *
-                                            0.018,
-                                        fontFamily: "OpenSans",
-                                        color: black.withOpacity(0.7),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal:
-                                        MediaQuery.of(context).size.height *
-                                            0.015,
-                                        vertical:
-                                        MediaQuery.of(context).size.height *
-                                            0.015,
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      disabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: black.withOpacity(0.4),
-                                              width: 1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                    ),
-                                    keyboardType: TextInputType.text,
-                                  ),
-                                  SizedBox(
-                                      height: MediaQuery.of(context).size.height *
-                                          0.005),
-                                  Text(
-                                    "Enter your zip code. E.g. 10710",
-                                    style: TextStyle(
-                                        color: secondaryColor,
-                                        fontFamily: "OpenSans",
-                                        fontSize:
-                                        MediaQuery.sizeOf(context).height *
-                                            0.013),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  SizedBox(
-                                      height: MediaQuery.of(context).size.height *
-                                          0.03),
-                                ],
+                                shape: RoundedRectangleBorder(
+
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
-                            ),
-                            isExpanded: _isExpanded,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        _emailSubscription = !_emailSubscription;
-                      });
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Checkbox(
-                          activeColor: primaryColor,
-                          value: _emailSubscription,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _emailSubscription = value!;
-                            });
+                            );
                           },
-                        ),
-                        Expanded(
-                          child: Text(
-                            "Yes, email me my member rewards, special invites, trend alerts and more.",
-                            style: TextStyle(
-                                color: black,
-                                fontFamily: "OpenSans_SemiBold",
-                                fontSize:
-                                MediaQuery.sizeOf(context).height * 0.0145),
+                          body: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.height * 0.025),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                                customTextField(
+                                  hintText: 'First Name',
+                                  controller: _firstNameController,
+                                ),
+                                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                                customTextField(
+                                  hintText: 'Last Name',
+                                  controller: _lastNameController,
+                                ),
+                                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                                customTextField(
+                                  hintText: 'Gender',
+                                  controller: _genderController,
+                                ),
+                                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                                customTextField(
+                                  hintText: 'Zip code',
+                                  controller: _zipCodeController,
+                                ),
+                                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                              ],
+                            ),
                           ),
+                          isExpanded: _isExpanded,
+                          canTapOnHeader: true,
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
-
-                  Text(
-                    "Your inbox is about to get a lot more stylish! Get excited for exclusive deals, trend, alerts, first access to our new collections, and more. Plus, don't miss out on all your Member rewards, birthday offer and special invites to events!",
-                    style: TextStyle(
-                        color: black,
-                        fontFamily: "OpenSans_SemiBold",
-                        fontSize: MediaQuery.sizeOf(context).height * 0.0145),
-                    textAlign: TextAlign.start,
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _emailSubscription = !_emailSubscription;
+                    });
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Checkbox(
+                        activeColor: primaryColor,
+                        value: _emailSubscription,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _emailSubscription = value!;
+                          });
+                        },
+                      ),
+                      Expanded(
+                        child: Text(
+                          "Yes, email me my member rewards, special invites, trend alerts and more.",
+                          style: TextStyle(
+                              color: black,
+                              fontFamily: "OpenSans_SemiBold",
+                              fontSize:
+                              MediaQuery.sizeOf(context).height * 0.0145),
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.015),
 
-                  //Sign Up
-                  InkWell(
-                    onTap: () async{
+                Text(
+                  "Your inbox is about to get a lot more stylish! Get excited for exclusive deals, trend, alerts, first access to our new collections, and more. Plus, don't miss out on all your Member rewards, birthday offer and special invites to events!",
+                  style: TextStyle(
+                      color: black,
+                      fontFamily: "OpenSans_SemiBold",
+                      fontSize: MediaQuery.sizeOf(context).height * 0.0145),
+                  textAlign: TextAlign.start,
+                ),
 
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                          vertical: MediaQuery.of(context).size.height * 0.015),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.height * 0.02,
-                          vertical: MediaQuery.of(context).size.height * 0.0125),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: black, width: 1),
-                          color: black,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
-                              offset: const Offset(0, 0),
-                              blurRadius: 1.5,
-                            )
-                          ]),
-                      child: Text(
-                        "Become a member",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.018,
-                            fontFamily: "OpenSans_SemiBold",
-                            color: Colors.white),
+                //Sign Up
+                InkWell(
+                  onTap: () async {
+                  },
+                  child: Container(
+                    width: width,
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.symmetric(vertical: height*0.025),
+                    padding: EdgeInsets.symmetric(horizontal: height * 0.025, vertical: height * 0.015),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7),
+                      color: primaryColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          offset: Offset(0, 0),
+                          blurRadius: 1,
+                          spreadRadius: 0,
+                        )
+                      ],
+                    ),
+                    child: Text(
+                      "Become a member",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: height * 0.019,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
+                ),
 
-                  RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(
-                      style: const TextStyle(color: Colors.black), // Default text style
-                      children: <TextSpan>[
-                        TextSpan(
-                          text:
-                          'By clicking \'Become a member\', I agree to the Lakes America Membership ',
-                          style: TextStyle(
-                              color: black.withOpacity(0.6),
-                              fontSize: MediaQuery.sizeOf(context).height * 0.0135,
-                              fontFamily: "OpenSans_SemiBold"),
-                        ),
-                        TextSpan(
-                          text: 'Terms and conditions.\n',
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: black.withOpacity(0.6),
-                              fontSize: MediaQuery.sizeOf(context).height * 0.0135,
-                              fontFamily: "OpenSans_SemiBold"),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Handle the tap, possibly navigating to a new Widget that explains the policy in detail
-                              print('Terms and conditions. tapped');
-                            },
-                        ),
-                        TextSpan(
-                          text:
-                          'To give you the full membership experience, we will process your personal data in accordance with the Lakes America\'s ',
-                          style: TextStyle(
-                              color: black.withOpacity(0.6),
-                              fontSize: MediaQuery.sizeOf(context).height * 0.0135,
-                              fontFamily: "OpenSans_SemiBold"),
-                        ),
-                        TextSpan(
-                          text: 'Privacy Notice.',
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: black.withOpacity(0.6),
-                              fontSize: MediaQuery.sizeOf(context).height * 0.0135,
-                              fontFamily: "OpenSans_SemiBold"),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Handle the tap, possibly navigating to a new Widget that explains the policy in detail
-                              print('Privacy Notice tapped');
-                            },
-                        ),
-                      ],
-                    ),
+                RichText(
+                  textAlign: TextAlign.start,
+                  text: TextSpan(
+                    style: const TextStyle(color: Colors.black), // Default text style
+                    children: <TextSpan>[
+                      TextSpan(
+                        text:
+                        'By clicking \'Become a member\', I agree to the Trinqoo Membership ',
+                        style: TextStyle(
+                            color: black.withOpacity(0.6),
+                            fontSize: MediaQuery.sizeOf(context).height * 0.0135,
+                            fontFamily: "OpenSans_SemiBold"),
+                      ),
+                      TextSpan(
+                        text: 'Terms and conditions.\n',
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: black.withOpacity(0.6),
+                            fontSize: MediaQuery.sizeOf(context).height * 0.0135,
+                            fontFamily: "OpenSans_SemiBold"),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            // Handle the tap, possibly navigating to a new Widget that explains the policy in detail
+                            print('Terms and conditions. tapped');
+                          },
+                      ),
+                      TextSpan(
+                        text:
+                        'To give you the full membership experience, we will process your personal data in accordance with the Trinqoo\'s ',
+                        style: TextStyle(
+                            color: black.withOpacity(0.6),
+                            fontSize: MediaQuery.sizeOf(context).height * 0.0135,
+                            fontFamily: "OpenSans_SemiBold"),
+                      ),
+                      TextSpan(
+                        text: 'Privacy Notice.',
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: black.withOpacity(0.6),
+                            fontSize: MediaQuery.sizeOf(context).height * 0.0135,
+                            fontFamily: "OpenSans_SemiBold"),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            // Handle the tap, possibly navigating to a new Widget that explains the policy in detail
+                            print('Privacy Notice tapped');
+                          },
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-
-            Positioned(
-                top: 0,left: 0,right: 0,bottom: 0,
-                child: circularProg? Center(child: CircularProgressIndicator(color: primaryColor,),) : const SizedBox())
-          ]
+          ),
+        ],
       ),
     );
   }

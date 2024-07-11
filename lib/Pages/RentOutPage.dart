@@ -1,5 +1,7 @@
+import 'package:airportparking/Pages/RentOutSpaceForm/RentOutSpacePage.dart';
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
 
@@ -213,29 +215,35 @@ class _RentOutPageState extends State<RentOutPage> {
           SizedBox(height: height * 0.025),
 
           //Rent out your space Con
-          Container(
-            width: width,
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(horizontal: height*0.025,vertical: height*0.015),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(7),
-                color: white,
-                border: Border.all(color: primaryColor,width: 1),
-                // boxShadow: [
-                //   BoxShadow(
-                //       color: primaryColor.withOpacity(0.25),
-                //       offset: Offset(0,0),
-                //       blurRadius: 1,
-                //       spreadRadius: 0
-                //   )
-                // ]
+          InkWell(
+            onTap: ()
+            {
+              Navigator.push(context, CupertinoPageRoute(builder: (_) => RentOutSpacePage()));
+            },
+            child: Container(
+              width: width,
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(horizontal: height*0.025,vertical: height*0.015),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(7),
+                  color: white,
+                  border: Border.all(color: primaryColor,width: 1),
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //       color: primaryColor.withOpacity(0.25),
+                  //       offset: Offset(0,0),
+                  //       blurRadius: 1,
+                  //       spreadRadius: 0
+                  //   )
+                  // ]
+              ),
+              child: Text("Rent out your space now",
+                style: TextStyle(
+                  color: primaryColor,
+                  fontSize: height * 0.019,
+                  fontWeight: FontWeight.bold,
+                ),),
             ),
-            child: Text("Rent out your space now",
-              style: TextStyle(
-                color: primaryColor,
-                fontSize: height * 0.019,
-                fontWeight: FontWeight.bold,
-              ),),
           ),
         ],
       ),

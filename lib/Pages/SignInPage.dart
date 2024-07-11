@@ -170,7 +170,7 @@ class _SignInPageState extends State<SignInPage> {
                       'Forgot your password?',
                       style: TextStyle(
                         color: black,
-                        fontSize: height * 0.016,
+                        fontSize: height * 0.018,
                         decoration: TextDecoration.underline,
                         fontFamily: "OpenSans_SemiBold"
                       ),

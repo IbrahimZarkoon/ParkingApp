@@ -114,16 +114,15 @@ class _SingleParkingSpaceModalState extends State<SingleParkingSpaceModal> {
                 googleMapController.complete(controller);
               },
               compassEnabled: true,
-              liteModeEnabled: true,
               onCameraMove: (position) {},
               zoomControlsEnabled: false,
               zoomGesturesEnabled: true,
               initialCameraPosition:
-              CameraPosition(target: widget.parkingSpace.latlng ?? const LatLng(0, 0), zoom: 15),
+              CameraPosition(target: widget.parkingSpace.latlng ?? const LatLng(0, 0), zoom: 16),
               onTap: (latlong) {
                 print(latlong);
               },
-              mapType: MapType.terrain,
+              mapType: MapType.satellite,
               markers: {
                 Marker(
                   markerId: MarkerId(widget.parkingSpace.id),
