@@ -1,7 +1,10 @@
 import 'package:airportparking/Constants/Colors.dart';
 import 'package:airportparking/Pages/RentOutSpaceForm/ElectricChargersTab.dart';
 import 'package:airportparking/Pages/RentOutSpaceForm/SpaceAvailabilityTab.dart';
+import 'package:airportparking/Pages/RentOutSpaceForm/SpaceLocationTab.dart';
+import 'package:airportparking/Pages/RentOutSpaceForm/SpacePricingTab.dart';
 import 'package:airportparking/Pages/RentOutSpaceForm/SpaceTypeTab.dart';
+import 'package:airportparking/Pages/RentOutSpaceForm/SummaryTab.dart';
 import 'package:airportparking/Pages/RentOutSpaceForm/ZipCodeTab.dart';
 import 'package:flutter/material.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -22,6 +25,9 @@ class _RentOutSpacePageState extends State<RentOutSpacePage> {
     SpaceTypeTab(),
     ElectricChargersTab(),
     SpaceAvailabilityTab(),
+    SpaceLocationTab(),
+    SpacePricingTab(),
+    SummaryTab(),
   ];
 
   @override
@@ -88,7 +94,7 @@ class _RentOutSpacePageState extends State<RentOutSpacePage> {
           child: Container(
             padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
             child: StepProgressIndicator(
-              totalSteps: 4,
+              totalSteps: tabs.length,
               currentStep: _selectedTab + 1, // Adjusted for zero-based index
               size: 10,
               selectedColor: primaryColor,
@@ -141,7 +147,7 @@ class _RentOutSpacePageState extends State<RentOutSpacePage> {
             ),
             alignment: Alignment.center,
             child: Text(
-              _selectedTab == tabs.length - 1 ? "Rent out" : "Continue",
+              _selectedTab == tabs.length - 1 ? "Submit for review" : "Continue",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: height * 0.02,

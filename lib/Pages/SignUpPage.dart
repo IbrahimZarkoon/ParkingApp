@@ -223,10 +223,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           _isExpanded = !_isExpanded;
                         });
                       },
-                      expandIconColor: Colors.black,
+                      expandIconColor: _isExpanded ? primaryColor : Colors.black,
                       children: [
                         ExpansionPanel(
-
                           backgroundColor: Colors.white,
                           headerBuilder: (BuildContext context, bool isExpanded) {
                             return InkWell(
@@ -237,17 +236,18 @@ class _SignUpPageState extends State<SignUpPage> {
                                 });
                               },
                               child: ListTile(
+                                iconColor: _isExpanded ? primaryColor : Colors.black,
+                                style: ListTileStyle.list,
                                 title: Text(
                                   'Add more',
                                   style: TextStyle(
                                     fontSize: MediaQuery.of(context).size.height * 0.018,
                                     fontFamily: "OpenSans_SemiBold",
                                     fontWeight: FontWeight.bold,
-                                    color:black,
+                                    color: _isExpanded ? primaryColor : Colors.black,
                                   ),
                                 ),
                                 shape: RoundedRectangleBorder(
-
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
@@ -286,7 +286,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           canTapOnHeader: true,
                         ),
                       ],
-                    ),
+                    )
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.04),

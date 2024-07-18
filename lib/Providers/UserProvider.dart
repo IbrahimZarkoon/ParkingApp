@@ -6,7 +6,8 @@ import '../Modals/UserClass.dart';
 class UserProvider extends ChangeNotifier {
   User _user = User(
     id: '',
-    name: '',
+    firstName: '',
+    lastName: '',
     address: '',
     currentLocation: const LatLng(0, 0),
   );
@@ -23,8 +24,12 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setName(String name) {
-    _user.name = name;
+  void setFirstName(String name) {
+    _user.firstName = name;
+    notifyListeners();
+  }
+  void setLastName(String name) {
+    _user.lastName = name;
     notifyListeners();
   }
 

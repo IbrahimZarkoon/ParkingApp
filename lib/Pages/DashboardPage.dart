@@ -4,6 +4,7 @@ import 'package:airportparking/Pages/SignInPage.dart';
 import 'package:flutter/material.dart';
 
 import '../Constants/Colors.dart';
+import 'ProfilePage.dart';
 
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key? key, required this.tabindex}) : super(key: key);
@@ -20,7 +21,7 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
     const LocationPage(),
     RentOutPage(),
     Container(),
-    SignInPage(),
+    ProfilePage(),
     
     //HomePage(),
     //TablesPage(),
