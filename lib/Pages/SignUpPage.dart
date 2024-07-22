@@ -89,7 +89,11 @@ class _SignUpPageState extends State<SignUpPage> {
             fontSize: height * 0.018,
             fontWeight: FontWeight.bold,
           ),
-          border: InputBorder.none,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(7),
+
+            ),
+            enabledBorder: InputBorder.none,
           suffixIcon: suffixIcon != null
               ? IconButton(
             icon: Icon(suffixIcon, color: _isObscured ? Colors.black.withOpacity(0.8) : Colors.black),

@@ -180,7 +180,11 @@ class _SpaceLocationTabState extends State<SpaceLocationTab> {
                           fontSize: height * 0.018,
                           fontWeight: FontWeight.bold,
                         ),
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(7),
+
+                        ),
+                        enabledBorder: InputBorder.none,
                       ),
                       keyboardType: TextInputType.streetAddress,
                     ),

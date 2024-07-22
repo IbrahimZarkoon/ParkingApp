@@ -100,7 +100,11 @@ class _SignInPageState extends State<SignInPage> {
                           fontSize: height * 0.018,
                           fontWeight: FontWeight.bold,
                         ),
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(7),
+
+                        ),
+                        enabledBorder: InputBorder.none,
                       ),
                       keyboardType: TextInputType.emailAddress,
                     ),
@@ -139,7 +143,11 @@ class _SignInPageState extends State<SignInPage> {
                           fontSize: height * 0.018,
                           fontWeight: FontWeight.bold,
                         ),
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(7),
+
+                        ),
+                        enabledBorder: InputBorder.none,
                         suffixIcon: IconButton(
                           icon: Icon(
                             _isObscured ? Icons.visibility : Icons.visibility_off,
