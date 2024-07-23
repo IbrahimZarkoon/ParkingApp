@@ -1,5 +1,8 @@
 import 'package:airportparking/CustomWidgets/CustomSnackBar.dart';
+import 'package:airportparking/Pages/ProfilePageTabs/AddPaymentMethodTab.dart';
+import 'package:airportparking/Pages/ProfilePageTabs/AddVehicleTab.dart';
 import 'package:airportparking/Providers/UserProvider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../Constants/Colors.dart';
 import '../Constants/Icons.dart';
+import '../CustomWidgets/CreditCardWidget.dart';
 
 const String customPlateSVG = '''
 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1761.55 779.81">
@@ -48,7 +52,6 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
 
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -71,6 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
       svgContent = customPlateSVG.replaceAll('{{NUMBER_PLATE}}', "XYZ-3344");
     });
   }
+
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -327,37 +331,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
           SizedBox(height: height*0.025,),
 
-          addContainer("CLICK TO ADD A VEHICLE"),
-          //Vehicle Container
-          // Container(
-          //   width: width,
-          //   height: height*0.25,
-          //   child: Stack(
-          //     children: [
-          //       // Car image
-          //       Positioned.fill(
-          //         child: Image.asset(
-          //           "assets/images/Blue_Sedan.png",
-          //           fit: BoxFit.cover,
-          //         ),
-          //       ),
-          //       // Number plate
-          //       Positioned(
-          //         top: 10,
-          //         left: 10,
-          //         child: svgContent.isEmpty
-          //             ? CircularProgressIndicator()
-          //             : SvgPicture.string(
-          //           svgNumberPlate,
-          //           width: 200,
-          //           height: 50,
-          //           fit: BoxFit.contain,
-          //           semanticsLabel: 'Number Plate',
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
+          addContainer("CLICK TO ADD A VEHICLE",onTap: () => Navigator.push(context, CupertinoPageRoute(builder: (_) => AddVehicleTab()))),
+
         ],
       ),
     );
@@ -390,8 +365,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
           SizedBox(height: height*0.025,),
 
-          addContainer("CLICK TO ADD A PAYMENT METHOD"),
+          addContainer("CLICK TO ADD A PAYMENT METHOD",onTap: () => Navigator.push(context, CupertinoPageRoute(builder: (_) => AddPaymentMethodTab()))),
 
+          SizedBox(height: height*0.025,),
+
+          paymentsCarousel()
         ],
       ),
     );
@@ -408,7 +386,7 @@ class _ProfilePageState extends State<ProfilePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text("Payment methods",
+          Text("Spaces",
             style: TextStyle(
                 color: black,
                 fontSize: height * 0.025,
@@ -416,7 +394,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 fontFamily: "OpenSans_SemiBold"
             ),),
 
-          Text("You have no payment methods added. Click below to add your first payment method.",
+          Text("You have no spaces added. Click below to add your first space.",
             style: TextStyle(
               color: black,
               fontSize: height * 0.016,
@@ -424,7 +402,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
           SizedBox(height: height*0.025,),
 
-          addContainer("CLICK TO ADD A PAYMENT METHOD"),
+          addContainer("CLICK TO ADD A SPACE"),
 
         ],
       ),
@@ -496,42 +474,181 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget addContainer(String title)
+  Widget addContainer(String title, {Function? onTap})
   {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return DottedBorder(
-      color: black.withOpacity(0.4),
-      strokeWidth: 1,
-      borderType: BorderType.RRect,
-      radius: Radius.circular(5),
-      dashPattern: [3, 3],
+    return InkWell(
+      onTap: onTap != null ? () => onTap() : null,
+      child: DottedBorder(
+        color: black.withOpacity(0.4),
+        strokeWidth: 1,
+        borderType: BorderType.RRect,
+        radius: Radius.circular(5),
+        dashPattern: [3, 3],
+        child: Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(vertical: height * 0.025, horizontal: height * 0.01),
+          decoration: BoxDecoration(
+            color: black.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.add,
+                size: height * 0.025,
+                color: black.withOpacity(0.4),
+              ),
+              SizedBox(width: height * 0.01),
+              Text(
+                title,
+                style: TextStyle(
+                  color: black.withOpacity(0.4),
+                  fontWeight: FontWeight.bold,
+                  fontSize: height * 0.02,
+                  fontFamily: "OpenSans_SemiBold",
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget vehicleCarousel()
+  {
+    return CarouselSlider(
+      options: CarouselOptions(
+        enlargeCenterPage: true,
+        autoPlay: true,
+        aspectRatio: 3,
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enableInfiniteScroll: true,
+        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        viewportFraction: 0.8,
+      ),
+      items: [
+        vehicleSizeCon("XYZ-123", "Medium", "assets/images/Blue_Sedan.png"),
+        vehicleSizeCon("ABC-456", "Large", "assets/images/Blue_Sedan.png"),
+        vehicleSizeCon("DEF-789", "Small", "assets/images/Blue_Sedan.png"),
+      ].map((widget) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: widget,
+            );
+          },
+        );
+      }).toList(),
+    );
+  }
+
+  Widget paymentsCarousel()
+  {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: height*0.3,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enableInfiniteScroll: true,
+        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        viewportFraction: 0.95,
+      ),
+      items: [
+        CreditCardWidget(
+          cardNumber: '1234 5678 9012 3456',
+          cardHolderName: 'John Doe',
+          expiryDate: '12/23',
+          bankName: 'Bank of America',
+          cardColor: Colors.blue,
+          logoPath: 'assets/images/visaCard.png',
+        ),
+        CreditCardWidget(
+          cardNumber: '9876 5432 1098 7654',
+          cardHolderName: 'Jane Smith',
+          expiryDate: '11/24',
+          bankName: 'State Bank of Pakistan',
+          cardColor: Colors.green,
+          logoPath: 'assets/images/masterCard.png',
+        ),
+      ].map((widget) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: widget,
+            );
+          },
+        );
+      }).toList(),
+    );
+  }
+
+  Widget vehicleSizeCon(String title, String desc, String img,
+      {bool isTap = false, VoidCallback? onTap}) {
+    double height = MediaQuery.sizeOf(context).height;
+    double width = MediaQuery.sizeOf(context).width;
+    return InkWell(
+      splashColor: Colors.transparent,
+      onTap: onTap,
       child: Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(vertical: height * 0.025, horizontal: height * 0.01),
+        margin: EdgeInsets.only(top: height * 0.025),
+        width: width,
+        padding: EdgeInsets.all(height * 0.015),
         decoration: BoxDecoration(
-          color: black.withOpacity(0.05),
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(7),
+          color: Colors.white,
+          border: Border.all(color: isTap ? primaryColor : Colors.white,),
+          boxShadow: [
+            BoxShadow(
+              color: isTap ? primaryColor.withOpacity(0.25) : Colors.black.withOpacity(0.25),
+              offset: Offset(0, 0),
+              blurRadius: 1,
+              spreadRadius: 0,
+            ),
+          ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(
-              Icons.add,
-              size: height * 0.025,
-              color: black.withOpacity(0.4),
-            ),
-            SizedBox(width: height * 0.01),
-            Text(
-              title,
-              style: TextStyle(
-                color: black.withOpacity(0.4),
-                fontWeight: FontWeight.bold,
-                fontSize: height * 0.02,
-                fontFamily: "OpenSans_SemiBold",
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(title, style: TextStyle(
+                    color: isTap ? primaryColor : black,
+                    fontSize: height * 0.018,
+                    fontWeight: FontWeight.bold,
+                  )),
+
+                  Text(desc, style: TextStyle(
+                    color: isTap ? primaryColor : black,
+                    fontSize: height * 0.016,
+                    fontWeight: FontWeight.bold,
+                  )),
+                ],
               ),
             ),
+
+            Container(
+              width: width * 0.2,
+              height: width * 0.15,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(img),
+                      fit: BoxFit.cover
+                  )
+              ),
+            )
           ],
         ),
       ),
