@@ -218,6 +218,7 @@ class _LocationPageState extends State<LocationPage> {
 
 
     return Scaffold(
+      backgroundColor: white,
       body: _locationLoaded
           ? SafeArea(
             child: Stack(children: [

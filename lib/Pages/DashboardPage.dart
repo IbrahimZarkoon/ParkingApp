@@ -1,3 +1,4 @@
+import 'package:airportparking/Pages/BookingsPage.dart';
 import 'package:airportparking/Pages/LocationPage.dart';
 import 'package:airportparking/Pages/RentOutPage.dart';
 import 'package:airportparking/Pages/SignInPage.dart';
@@ -20,13 +21,8 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
   final userTabs = [
     const LocationPage(),
     RentOutPage(),
-    Container(),
+    BookingsPage(),
     ProfilePage(),
-    
-    //HomePage(),
-    //TablesPage(),
-    //OrdersPage(),
-    //ProfilePage(),
   ];
 
 
@@ -42,7 +38,8 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     var orientation = MediaQuery.of(context).orientation;
-
+    double height = MediaQuery.sizeOf(context).height;
+    double width = MediaQuery.sizeOf(context).width;
 
     return SafeArea(
       child: Scaffold(
@@ -103,9 +100,11 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
             unselectedLabelColor: Colors.black.withOpacity(0.35),
             labelColor:  primaryColor,
             labelStyle:  TextStyle(
-                fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014
+                fontSize: height *0.015
             ),
-
+            unselectedLabelStyle: TextStyle(
+              fontSize: height*0.013,
+            ),
             onTap: (int index)
             {
               setState(() {
@@ -115,24 +114,24 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
             tabs: [
               Tab(
                 iconMargin: const EdgeInsets.only(bottom: 0),
-                icon: Icon(widget.tabindex == 0? Icons.local_parking : Icons.local_parking_outlined,size:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.025 : MediaQuery.sizeOf(context).width*0.025,),
-                child:  Flexible(child: Text("Parking",style: TextStyle(fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014),)),
+                icon: Icon(widget.tabindex == 0? Icons.local_parking : Icons.local_parking_outlined,size:widget.tabindex == 0? height*0.0275 : height*0.025,),
+                child:  Flexible(child: Text("Parking",)),
               ),
               Tab(
                 iconMargin: const EdgeInsets.only(bottom: 0),
-                icon: Icon(widget.tabindex == 1? Icons.car_rental :Icons.car_rental_outlined,size:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.025 : MediaQuery.sizeOf(context).width*0.025),
-                child: Flexible(child: Text("Rent Out",style: TextStyle(fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014),)),
+                icon: Icon(widget.tabindex == 1? Icons.car_rental :Icons.car_rental_outlined,size:widget.tabindex == 1? height*0.0275 : height*0.025),
+                child: Flexible(child: Text("Rent Out",)),
               ),
               Tab(
                 iconMargin: const EdgeInsets.only(bottom: 0),
-                icon: Icon(widget.tabindex == 2? Icons.receipt_long :Icons.receipt_long_outlined,size:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.025 : MediaQuery.sizeOf(context).width*0.025),
-                child: Flexible(child: Text("",style: TextStyle(fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014),)),
+                icon: Icon(widget.tabindex == 2? Icons.receipt_long :Icons.receipt_long_outlined,size:widget.tabindex == 2? height*0.0275 : height*0.025),
+                child: Flexible(child: Text("Bookings",)),
 
               ),
               Tab(
                 iconMargin: const EdgeInsets.only(bottom: 0),
-                icon: Icon(widget.tabindex == 3? Icons.person_2 :Icons.person_2_outlined,size:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.025 : MediaQuery.sizeOf(context).width*0.025),
-                child: Flexible(child: Text("Profile",style: TextStyle(fontSize:orientation == Orientation.portrait? MediaQuery.sizeOf(context).height*0.014 : MediaQuery.sizeOf(context).width*0.014),)),
+                icon: Icon(widget.tabindex == 3? Icons.person_2 :Icons.person_2_outlined,size:widget.tabindex == 3? height*0.0275 : height*0.025),
+                child: Flexible(child: Text("Profile",)),
 
               ),
             ],

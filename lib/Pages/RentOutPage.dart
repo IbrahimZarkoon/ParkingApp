@@ -21,6 +21,7 @@ class _RentOutPageState extends State<RentOutPage> {
     double width = MediaQuery.sizeOf(context).width;
 
     return Container(
+      color: Colors.white,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         physics: const BouncingScrollPhysics(),

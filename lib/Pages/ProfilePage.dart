@@ -1,6 +1,7 @@
 import 'package:airportparking/CustomWidgets/CustomSnackBar.dart';
 import 'package:airportparking/Pages/ProfilePageTabs/AddPaymentMethodTab.dart';
 import 'package:airportparking/Pages/ProfilePageTabs/AddVehicleTab.dart';
+import 'package:airportparking/Pages/RentOutSpaceForm/RentOutSpacePage.dart';
 import 'package:airportparking/Providers/UserProvider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -105,6 +106,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
           //Vehicles Container
           vehiclesCon(),
+
+          shadowLine(),
+
+          spacesCon(),
 
           shadowLine(),
 
@@ -402,7 +407,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
           SizedBox(height: height*0.025,),
 
-          addContainer("CLICK TO ADD A SPACE"),
+          addContainer("CLICK TO ADD A SPACE",onTap: ()=> Navigator.push(context, CupertinoPageRoute(builder: (_) => RentOutSpacePage()))),
 
         ],
       ),
