@@ -3,6 +3,7 @@ import 'package:airportparking/Pages/LocationPage.dart';
 import 'package:airportparking/Pages/RentOutPage.dart';
 import 'package:airportparking/Pages/SignInPage.dart';
 import 'package:flutter/material.dart';
+import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
 import '../Constants/Colors.dart';
 import 'ProfilePage.dart';
@@ -70,7 +71,7 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
                 controller: _tabController,
                 children: userTabs)),
 
-        bottomNavigationBar:  Container(
+        bottomNavigationBar: Container(
           decoration: BoxDecoration(
               color: white,
               boxShadow: [
@@ -82,57 +83,37 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
                 )
               ]
           ),
-          height: kToolbarHeight,
-          child: TabBar(
-            dividerColor: const Color(0xfff1f1f1),
-            padding: const EdgeInsets.all(0),
-            physics: const NeverScrollableScrollPhysics(),
-            indicator:  BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: white,
-                  width: 3.0,
-                ),
-              ),
-            ),
-            controller: _tabController,
-            indicatorColor: white,
-            unselectedLabelColor: Colors.black.withOpacity(0.35),
-            labelColor:  primaryColor,
-            labelStyle:  TextStyle(
-                fontSize: height *0.015
-            ),
-            unselectedLabelStyle: TextStyle(
-              fontSize: height*0.013,
-            ),
-            onTap: (int index)
-            {
+          child: SlidingClippedNavBar(
+            backgroundColor: Colors.white,
+            onButtonPressed: (index) {
               setState(() {
                 widget.tabindex = index;
               });
+              _tabController.animateTo(index,
+                  duration: const Duration(milliseconds: 200), curve: Curves.easeOutQuad);
             },
-            tabs: [
-              Tab(
-                iconMargin: const EdgeInsets.only(bottom: 0),
-                icon: Icon(widget.tabindex == 0? Icons.local_parking : Icons.local_parking_outlined,size:widget.tabindex == 0? height*0.0275 : height*0.025,),
-                child:  Flexible(child: Text("Parking",)),
+            iconSize: height*0.03,
+            activeColor: primaryColor,
+            fontSize: height*0.02,
+            fontStyle: FontStyle.normal,
+            selectedIndex: widget.tabindex,
+            inactiveColor: Color(0xffb7bcbd),
+            barItems: [
+              BarItem(
+                icon: widget.tabindex == 0 ? Icons.local_parking : Icons.local_parking_outlined,
+                title: 'Parking',
               ),
-              Tab(
-                iconMargin: const EdgeInsets.only(bottom: 0),
-                icon: Icon(widget.tabindex == 1? Icons.car_rental :Icons.car_rental_outlined,size:widget.tabindex == 1? height*0.0275 : height*0.025),
-                child: Flexible(child: Text("Rent Out",)),
+              BarItem(
+                icon: widget.tabindex == 1 ? Icons.car_rental : Icons.car_rental_outlined,
+                title: 'Rent Out',
               ),
-              Tab(
-                iconMargin: const EdgeInsets.only(bottom: 0),
-                icon: Icon(widget.tabindex == 2? Icons.receipt_long :Icons.receipt_long_outlined,size:widget.tabindex == 2? height*0.0275 : height*0.025),
-                child: Flexible(child: Text("Bookings",)),
-
+              BarItem(
+                icon: widget.tabindex == 2 ? Icons.receipt_long : Icons.receipt_long_outlined,
+                title: 'Bookings',
               ),
-              Tab(
-                iconMargin: const EdgeInsets.only(bottom: 0),
-                icon: Icon(widget.tabindex == 3? Icons.person_2 :Icons.person_2_outlined,size:widget.tabindex == 3? height*0.0275 : height*0.025),
-                child: Flexible(child: Text("Profile",)),
-
+              BarItem(
+                icon: widget.tabindex == 3 ? Icons.person_2 : Icons.person_2_outlined,
+                title: 'Profile',
               ),
             ],
           ),
