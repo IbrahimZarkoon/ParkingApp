@@ -128,7 +128,7 @@ class _BookingsPageState extends State<BookingsPage>
                 TabBar(
                   controller: _tabController,
                   labelColor: Colors.black,
-                  tabs: [
+                  tabs: const [
                     Tab(text: 'In Progress'),
                     Tab(text: 'Upcoming'),
                     Tab(text: 'Past'),
@@ -213,7 +213,7 @@ class _BookingsPageState extends State<BookingsPage>
                 TabBar(
                   controller: _tabController,
                   labelColor: Colors.black,
-                  tabs: [
+                  tabs: const [
                     Tab(text: 'In Progress'),
                     Tab(text: 'Upcoming'),
                     Tab(text: 'Past'),
