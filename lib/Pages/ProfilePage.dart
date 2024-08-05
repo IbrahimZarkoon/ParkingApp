@@ -95,6 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         physics: const BouncingScrollPhysics(),
+        padding: EdgeInsets.only(bottom: kToolbarHeight),
         children: [
 
           //Profile img, Name, Edit Profile Con

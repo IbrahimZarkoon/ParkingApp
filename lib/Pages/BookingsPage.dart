@@ -30,6 +30,22 @@ class _BookingsPageState extends State<BookingsPage>
       "https://img.freepik.com/free-photo/blank-spaces-parking-lot_1127-36.jpg",
       "https://img.freepik.com/free-photo/structure-indoor-automobile-basement-large_1127-2362.jpg"
     ]),
+    ParkingSpace("1", "City Center Lot", "456 Center St, Cityville",
+        const LatLng(24.8722059, 67.0545099), 150, 0, 18.00, [
+          "https://img.freepik.com/free-photo/hallway-garage_23-2149397542.jpg",
+          "https://img.freepik.com/free-photo/horizontal-picture-car-parking-underground-garage-interior-with-neon-lights-autocars-parked-buildings-urban-constructions-space-transportation-vehicle-night-city-concept_343059-3077.jpg"
+        ]),
+    ParkingSpace("2", "Eastside Parking", "789 East St, Cityville",
+        const LatLng(24.8732059, 67.0555099), 100, 4.00, 0, [
+          "https://img.freepik.com/free-photo/blank-spaces-parking-lot_1127-36.jpg",
+          "https://img.freepik.com/free-photo/structure-indoor-automobile-basement-large_1127-2362.jpg"
+        ]),
+    ParkingSpace("1", "City Center Lot", "456 Center St, Cityville",
+        const LatLng(24.8722059, 67.0545099), 150, 0, 18.00, [
+          "https://img.freepik.com/free-photo/hallway-garage_23-2149397542.jpg",
+          "https://img.freepik.com/free-photo/horizontal-picture-car-parking-underground-garage-interior-with-neon-lights-autocars-parked-buildings-urban-constructions-space-transportation-vehicle-night-city-concept_343059-3077.jpg"
+        ]),
+
   ];
 
   @override
@@ -244,7 +260,7 @@ class _BookingsPageState extends State<BookingsPage>
 
     return ListView.builder(
       itemCount: parkingSpacesList.length,
-      padding: EdgeInsets.symmetric(vertical: height * 0.025),
+      padding: EdgeInsets.only(bottom: kToolbarHeight+height*0.025,top: height*0.025),
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
       physics: BouncingScrollPhysics(),

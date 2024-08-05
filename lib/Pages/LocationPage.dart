@@ -1,6 +1,6 @@
 import 'dart:async';
-
-import 'package:airportparking/Constants/Colors.dart';
+import 'package:airportparking/Constants/colors.dart';
+import 'package:airportparking/CustomWidgets/FilterBottomModal/FilterBottomModal.dart';
 import 'package:airportparking/CustomWidgets/ParkingSpaceCarousel.dart';
 import 'package:airportparking/Modals/ParkingSpaceClass.dart';
 import 'package:airportparking/Providers/UserProvider.dart';
@@ -21,7 +21,6 @@ class LocationPage extends StatefulWidget {
 }
 
 class _LocationPageState extends State<LocationPage> {
-
   final Completer<GoogleMapController> _controller = Completer();
   late PageController _pageController;
 
@@ -36,36 +35,21 @@ class _LocationPageState extends State<LocationPage> {
   String _searchQuery = '';
 
   List<ParkingSpace> parkingSpacesList = [
-    ParkingSpace(
-        "0",
-        "Downtown Garage",
-        "123 Main St, Cityville",
-        const LatLng(24.8742059, 67.0545099),
-        200,
-        5.00,
-        0.00,
-        ["https://img.freepik.com/free-photo/city-square_1359-706.jpg?t=st=1720013545~exp=1720017145~hmac=7573362b63f0631a28b9674d3ec10b40ce3a7f0d47bfc6223fbbebce258fa768&w=2000",
-          "https://img.freepik.com/free-photo/bridge-sunset_1127-2045.jpg?t=st=1720013793~exp=1720017393~hmac=c065f8215902ce3a711b12e421b8002d6ef3c4d64a19490b083311e428d6c1e8&w=2000"]),
-    ParkingSpace(
-        "1",
-        "City Center Lot",
-        "456 Center St, Cityville",
-        const LatLng(24.8722059, 67.0545099),
-        150,
-        0,
-        18.00,
-        ["https://img.freepik.com/free-photo/hallway-garage_23-2149397542.jpg?t=st=1720013709~exp=1720017309~hmac=800e80fa1a50cf3834b492616651f6a9bbde3bc3efaad2dc1377f7d9d9546054&w=2000",
-          "https://img.freepik.com/free-photo/horizontal-picture-car-parking-underground-garage-interior-with-neon-lights-autocars-parked-buildings-urban-constructions-space-transportation-vehicle-night-city-concept_343059-3077.jpg?t=st=1720013731~exp=1720017331~hmac=324e1a9a268497cddb93da92bf2efa1a4beaf1de5593c38a93b4c919a3eabcd7&w=2000"]),
-    ParkingSpace(
-        "2",
-        "Eastside Parking",
-        "789 East St, Cityville",
-        const LatLng(24.8732059, 67.0555099),
-        100,
-        4.00,
-        00,
-        ["https://img.freepik.com/free-photo/blank-spaces-parking-lot_1127-36.jpg?t=st=1720013745~exp=1720017345~hmac=9e88788d92f224f7f9fc9b34ee3957155a64b6fbbd1b95972fd6e7587cbf2cd1&w=2000",
-          "https://img.freepik.com/free-photo/structure-indoor-automobile-basement-large_1127-2362.jpg?t=st=1720013762~exp=1720017362~hmac=b53823777ca2d35f665c7b16fb0899f7b6bdbf4ef2d874b81653d759a7b2baeb&w=2000"]),
+    ParkingSpace("0", "Downtown Garage", "123 Main St, Cityville",
+        const LatLng(24.8742059, 67.0545099), 200, 5.00, 0.00, [
+      "https://img.freepik.com/free-photo/city-square_1359-706.jpg?t=st=1720013545~exp=1720017145~hmac=7573362b63f0631a28b9674d3ec10b40ce3a7f0d47bfc6223fbbebce258fa768&w=2000",
+      "https://img.freepik.com/free-photo/bridge-sunset_1127-2045.jpg?t=st=1720013793~exp=1720017393~hmac=c065f8215902ce3a711b12e421b8002d6ef3c4d64a19490b083311e428d6c1e8&w=2000"
+    ]),
+    ParkingSpace("1", "City Center Lot", "456 Center St, Cityville",
+        const LatLng(24.8722059, 67.0545099), 150, 0, 18.00, [
+      "https://img.freepik.com/free-photo/hallway-garage_23-2149397542.jpg?t=st=1720013709~exp=1720017309~hmac=800e80fa1a50cf3834b492616651f6a9bbde3bc3efaad2dc1377f7d9d9546054&w=2000",
+      "https://img.freepik.com/free-photo/horizontal-picture-car-parking-underground-garage-interior-with-neon-lights-autocars-parked-buildings-urban-constructions-space-transportation-vehicle-night-city-concept_343059-3077.jpg?t=st=1720013731~exp=1720017331~hmac=324e1a9a268497cddb93da92bf2efa1a4beaf1de5593c38a93b4c919a3eabcd7&w=2000"
+    ]),
+    ParkingSpace("2", "Eastside Parking", "789 East St, Cityville",
+        const LatLng(24.8732059, 67.0555099), 100, 4.00, 00, [
+      "https://img.freepik.com/free-photo/blank-spaces-parking-lot_1127-36.jpg?t=st=1720013745~exp=1720017345~hmac=9e88788d92f224f7f9fc9b34ee3957155a64b6fbbd1b95972fd6e7587cbf2cd1&w=2000",
+      "https://img.freepik.com/free-photo/structure-indoor-automobile-basement-large_1127-2362.jpg?t=st=1720013762~exp=1720017362~hmac=b53823777ca2d35f665c7b16fb0899f7b6bdbf4ef2d874b81653d759a7b2baeb&w=2000"
+    ]),
     ParkingSpace(
         "3",
         "Westend Garage",
@@ -176,17 +160,19 @@ class _LocationPageState extends State<LocationPage> {
           onTap: () {
             setState(() {
               _selectedLatLng = parkingSpace.latlng!;
+              loc = parkingSpace.title ?? loc;
             });
             print("SELECTED ::::::::::;; $_selectedLatLng");
             _pageController.animateToPage(
               index,
-              duration: Duration(milliseconds: 400),
+              duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOut,
             );
           },
           icon: index == selectedIndex
               ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan)
-              : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+              : BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueYellow),
           // Remove or adjust the anchor property
           // anchor: const Offset(0.5, 0.5), // Center of the marker
         );
@@ -201,8 +187,8 @@ class _LocationPageState extends State<LocationPage> {
   List<ParkingSpace> _searchParkingSpaces(String query) {
     return parkingSpacesList
         .where((space) =>
-    space.title!.toLowerCase().contains(query.toLowerCase()) ||
-        space.address!.toLowerCase().contains(query.toLowerCase()))
+            space.title!.toLowerCase().contains(query.toLowerCase()) ||
+            space.address!.toLowerCase().contains(query.toLowerCase()))
         .toList();
   }
 
@@ -214,14 +200,13 @@ class _LocationPageState extends State<LocationPage> {
     double width = MediaQuery.sizeOf(context).width;
 
     List<ParkingSpace> filteredParkingSpaces =
-    _searchParkingSpaces(_searchQuery);
-
+        _searchParkingSpaces(_searchQuery);
 
     return Scaffold(
       backgroundColor: white,
       body: _locationLoaded
           ? SafeArea(
-            child: Stack(children: [
+              child: Stack(children: [
                 SizedBox(
                   width: width,
                   height: height,
@@ -230,8 +215,7 @@ class _LocationPageState extends State<LocationPage> {
                       _controller.complete(controller);
                     },
                     compassEnabled: true,
-                    onCameraMove: (position)
-                    {
+                    onCameraMove: (position) {
                       searchNode.unfocus();
                     },
                     zoomControlsEnabled: false,
@@ -242,9 +226,7 @@ class _LocationPageState extends State<LocationPage> {
                       print(latlong);
                     },
                     mapType: MapType.terrain,
-
                     markers: {
-            
                       Marker(
                         markerId: const MarkerId('currentLocation'),
                         position: _userLatLng,
@@ -255,9 +237,9 @@ class _LocationPageState extends State<LocationPage> {
                   ),
                 ),
                 Positioned(
-                  top: height * 0.015, left: height * 0.015,
+                  top: height * 0.015,
+                  left: height * 0.015,
                   right: height * 0.015,
-            
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -266,16 +248,18 @@ class _LocationPageState extends State<LocationPage> {
                         children: [
                           Flexible(
                             child: InkWell(
-                              onTap: ()
-                              {
+                              onTap: () {
                                 setState(() {
                                   _showSearchBar = true;
                                 });
                                 searchNode.requestFocus();
                               },
                               child: Container(
-                                margin: EdgeInsets.only(bottom: height * 0.015,right: height * 0.015),
-                                padding: EdgeInsets.symmetric(horizontal: height * 0.015),
+                                margin: EdgeInsets.only(
+                                    bottom: height * 0.015,
+                                    right: height * 0.015),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: height * 0.015),
                                 decoration: BoxDecoration(
                                   color: Colors.white.withOpacity(0.95),
                                   borderRadius: BorderRadius.circular(12),
@@ -289,47 +273,52 @@ class _LocationPageState extends State<LocationPage> {
                                   ],
                                 ),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Flexible(
                                       child: AnimatedSwitcher(
-                                        duration: const Duration(milliseconds: 300),
+                                        duration:
+                                            const Duration(milliseconds: 300),
                                         child: _showSearchBar
                                             ? TextField(
-                                          focusNode: searchNode,
-                                          cursorColor: primaryColor,
-                                          style: TextStyle(
-                                              color: primaryColor, fontSize: 14),
-                                          decoration: InputDecoration(
-                                            hintText: 'Where are you going?',
-                                            border: InputBorder.none,
-                                            hintStyle:
-                                            TextStyle(color: primaryColor),
-                                          ),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _searchQuery = value;
-                                            });
-                                          },
-                                        )
+                                                focusNode: searchNode,
+                                                cursorColor: primaryColor,
+                                                style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontSize: 14),
+                                                decoration: InputDecoration(
+                                                  hintText:
+                                                      'Where are you going?',
+                                                  border: InputBorder.none,
+                                                  hintStyle: TextStyle(
+                                                      color: primaryColor),
+                                                ),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _searchQuery = value;
+                                                  });
+                                                },
+                                              )
                                             : Text(
-                                          loc,
-                                          style: TextStyle(
-                                              fontSize: 14, color: primaryColor),
-                                        ),
+                                                loc,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: primaryColor),
+                                              ),
                                       ),
                                     ),
                                     IconButton(
                                       icon: _showSearchBar
                                           ? Icon(
-                                        Icons.close,
-                                        color: primaryColor,
-                                      )
+                                              Icons.close,
+                                              color: primaryColor,
+                                            )
                                           : Icon(
-                                        Icons.search,
-                                        color: primaryColor,
-                                      ),
+                                              Icons.search,
+                                              color: primaryColor,
+                                            ),
                                       onPressed: () {
                                         setState(() {
                                           _showSearchBar = !_showSearchBar;
@@ -341,30 +330,35 @@ class _LocationPageState extends State<LocationPage> {
                               ),
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(bottom: height * 0.015),
-                            padding: EdgeInsets.all( height * 0.015),
-                            decoration: BoxDecoration(
-                              color: primaryColor,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: black.withOpacity(0.15),
-                                  offset: const Offset(1, 1),
-                                  blurRadius: 1.5,
-                                  spreadRadius: 1,
-                                )
-                              ],
-                            ),
-                            child: SvgPicture.string(
-                              svgFilterIcon,
-                              fit: BoxFit.contain,
-                              color: white,
+                          InkWell(
+                            onTap: () async {
+                              await _getCurrentLocation();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: height * 0.015),
+                              padding: EdgeInsets.all(height * 0.015),
+                              decoration: BoxDecoration(
+                                color: white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: black.withOpacity(0.2),
+                                    offset: const Offset(0,0),
+                                    blurRadius: 1.5,
+                                    spreadRadius: 1,
+                                  )
+                                ],
+                              ),
+                              child:  Icon(
+                                CupertinoIcons.location,
+                                color: primaryColor,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      if (_searchQuery.isNotEmpty) Container(
+                      if (_searchQuery.isNotEmpty)
+                        Container(
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.95),
                             borderRadius: BorderRadius.circular(12),
@@ -390,7 +384,7 @@ class _LocationPageState extends State<LocationPage> {
                                   int ind = parkingSpacesList.indexOf(space);
                                   _pageController.animateToPage(
                                     ind,
-                                    duration: Duration(milliseconds: 300),
+                                    duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeInOut,
                                   );
                                   setState(() {
@@ -403,14 +397,25 @@ class _LocationPageState extends State<LocationPage> {
                             },
                           ),
                         ),
+                      //Filter Button
                       InkWell(
-                        onTap: ()
-                        async {
-                          await _getCurrentLocation();
+                        onTap: () {
+                          showModalBottomSheet(
+                              isScrollControlled: true,
+                              constraints: BoxConstraints(
+                                  maxHeight: height * 0.9, maxWidth: width),
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20))),
+                              context: context,
+                              builder: (context) {
+                                return const FilterBottomModal();
+                              });
                         },
                         child: Container(
                           margin: EdgeInsets.only(bottom: height * 0.015),
-                          padding: EdgeInsets.all( height * 0.015),
+                          padding: EdgeInsets.all(height * 0.015),
                           decoration: BoxDecoration(
                             color: primaryColor,
                             borderRadius: BorderRadius.circular(12),
@@ -423,43 +428,43 @@ class _LocationPageState extends State<LocationPage> {
                               )
                             ],
                           ),
-                          child: const Icon(
-                            CupertinoIcons.location,
-                            color: Colors.white,
+                          child: SvgPicture.string(
+                            svgFilterIcon,
+                            fit: BoxFit.contain,
+                            color: white,
                           ),
                         ),
                       ),
                     ],
                   ),
-            
                 ),
-            
                 Positioned(
-            bottom: 0, left: 0,
-            right: 0,
-            
-                    child: SizedBox(
-                      width: width,
-                      height: height*0.175,
-                      child: FutureBuilder<GoogleMapController>(
-                        future: _controller.future,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
-                            return ParkingSpacesCarousel(
-                              createMarkers: _createMarkers,
-                              parkingSpacesList: parkingSpacesList,
-                              gmController: snapshot.data!,
-                              pageController: _pageController,
-                              onCarouselChange: _onCarouselChange,
-                            );
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        },
-                      ),
+                  bottom: kToolbarHeight,
+                  left: 0,
+                  right: 0,
+                  child: SizedBox(
+                    width: width,
+                    height: height * 0.175,
+                    child: FutureBuilder<GoogleMapController>(
+                      future: _controller.future,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return ParkingSpacesCarousel(
+                            createMarkers: _createMarkers,
+                            parkingSpacesList: parkingSpacesList,
+                            gmController: snapshot.data!,
+                            pageController: _pageController,
+                            onCarouselChange: _onCarouselChange,
+                          );
+                        } else {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      },
                     ),
-                )]),
-          )
+                  ),
+                )
+              ]),
+            )
           : const Center(child: CircularProgressIndicator()),
     );
   }

@@ -25,7 +25,7 @@ class _RentOutPageState extends State<RentOutPage> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(vertical: height*0.015,horizontal: height*0.015),
+        padding: EdgeInsets.only(left: height*0.015,right: height*0.015,top: height*0.015,bottom: height*0.015+kToolbarHeight),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
